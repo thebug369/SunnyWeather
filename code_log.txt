@@ -1,0 +1,54 @@
+添加依赖
+litepal  okhttp  glide  gson
+
+需要再配置一下LitePalApplication  ，修改AndroidManifest.xml中的代码
+android:name="org.litepal.LitePalApplication"	
+
+注意db里的数据类要extends LitePalSupport而不是Datasupport
+
+
+需要将三个类添加到litepal.xml中（添加映射模型）右击app/src/main目录→New→Directory，创建一个assets目录，
+ 然后在assets目录下再新建一个litepal.xml文件（即是新建File），接着编辑litepal.xml文件中的内容
+
+
+编写一个处理服务器返回的城市数据的Utility类（利用JSONObject和JSONArray）
+
+
+
+
+
+
+采用fragment编写的原因：现在可以开始写界面了。由于遍历全国省市县的功能我们在后面 还会复用，因此就不写在活动里面了，而是写在碎片里面，这样需要复用的时候直接在布局里 面引用碎片就可以了。
+这里之所以要自己定义标题栏，是因为碎片中最好不要直接使用 ActionBar或Toolbar，不然在复用的时候可能会出现一些你不想看到的效果。 
+
+values文件夹下没有style.xml   有themes.xml
+
+编写数据访问服务器以及处理数据fragment
+
+
+编写界面ui
+
+
+注意litepal.xml路径问题，要和包的路径一致
+
+
+3.8  目前遇到问题  点击市级列表会一直显示加载中，（debug Log得知无法进入if选项，思考result的值，继而进入handleCountyResponse查找得知漏掉一句return true；）点击返回键后返回市级列表，重新点击即可进入县级列表，
+点击县级列表后进入天气界面失败。（问题1，debug到String updateTime=weather.basic.update.updateTime.split(" ")[1];抛出数组越界问题，后问题莫名其妙解决了？？？？不是网上找到的半角全角空格问题 但
+执行一次注释后（weather.basic.update.updateTime=weather.basic.update.updateTime.replaceAll(String.valueOf((char)12288), " ");）就问题消失了
+问题2，String weatherInfo   =  weather.now.more.info;抛出空指针异常，查看Gson使用无误，查看网页返回json数据对照Now类发现没有@SerializedName，问题解决）
+
+
+
+直接findviewbyid是在当前view中找，用view.findviewbyid才是用你的forecast_item布局找。
+
+
+使用Glide去加载这张图片（bing每日一图）
+
+
+实现背景图和状态栏融合到一起的效果
+
+实现下滑更新 外面嵌套一层SwipeRefreshLayout布局 set下拉监听器，每下拉一次requestWeather一次
+dependencies包要添加两行（网上只有一行）
+implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+   implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
+
